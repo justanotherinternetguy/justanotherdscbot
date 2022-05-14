@@ -1,4 +1,4 @@
-# NOTE: DO NOT UPLOAD THE DISCORD BOT TOKEN
+# NOTE TO SELF: DO NOT UPLOAD THE DISCORD BOT TOKEN
 import random
 import discord
 import os
