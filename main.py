@@ -40,7 +40,8 @@ async def on_member_join(member):
 
 @bot.event
 async def on_message_edit(before, after):
-    await ctx.send('**{0.author}** got sniped:\n{0.content} -> {1.content}'.format(before, after))
+    fmt = '**{0.author}** got sniped:\n{0.content} -> {1.content}'
+    await before.channel.send(fmt.format(before, after))
 
 @bot.event
 async def on_message_delete(message):
