@@ -1,7 +1,7 @@
 # NOTE TO SELF: DO NOT UPLOAD THE DISCORD BOT TOKEN
 
 # TODO:
-# Moderation (mute + kick + ban)
+# Moderation (mute) (kick + ban + unban done)
 # Music bot
 # Reaction roles?
 # Air quality heh
