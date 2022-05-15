@@ -1,4 +1,11 @@
 # NOTE TO SELF: DO NOT UPLOAD THE DISCORD BOT TOKEN
+
+# TODO:
+# Moderation (mute + kick + ban)
+# Music bot
+# Reaction roles?
+# Air quality heh
+
 import random
 import discord
 import os
@@ -12,11 +19,11 @@ from discord.ext import commands
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
-description = "justanotherdscbot testing..."
 intents = discord.Intents.default()
 intents.members = True
+description="justanotherdscbot: MADE BY justanotherinternetguy#6982"
 
-bot = commands.Bot(command_prefix='~', description=description, intents=intents)
+bot = commands.Bot(command_prefix='~', intents=intents) 
 
 def get_quote():
     response = requests.get("https://zenquotes.io/api/random")
@@ -53,22 +60,6 @@ async def ping(ctx):
     await ctx.send('Hello {}'.format(ctx.author.mention))
 
 @bot.command()
-async def HELP(ctx):
-    await ctx.send("""
-                justanotherdscbot help:
-Prefix is ~
-**COMMANDS**:
-    `HELP`: show this message
-    `howlarge`: how large is your mother?
-    `guess`: guessing game
-    `quote`: random quote
-
-**PASSIVE**:
-    bot will automatically display before/after on edited msgs
-    bot will automatically display deleted msgs          
-            """)
-
-@bot.command()
 async def roll(ctx, dice: str):
     try:
         rolls, limit = map(int, dice.split('+'))
@@ -93,5 +84,48 @@ async def getquote(ctx):
 async def howlarge(ctx):
     size = random.randint(1000, 99999)
     await ctx.reply('your mom is {} pounds large'.format(size), mention_author=True)
+
+
+@bot.command()
+@commands.has_permissions(ban_members=True)
+async def ban(ctx, member : discord.Member, reason=None):
+    """Bans a user"""
+    if reason == None:
+        await ctx.send(f"Woah {ctx.author.mention}, Make sure you provide a reason!")
+    else:
+        messageok = f"You have been **banned** from {ctx.guild.name} for {reason}"
+        to_send = '{0.mention} has been **banned**!'.format(member)
+        await ctx.reply(to_send)
+        await member.send(messageok)
+        await member.ban(reason=reason)
+
+
+@bot.command()
+@commands.has_permissions(administrator = True)
+async def unban(ctx, *, member):
+    banned_users = await ctx.guild.bans()
+    member_name, member_discriminator = member.split("#")
+
+    for ban_entry in banned_users:
+        user = ban_entry.user
+
+        if (user.name, user.discriminator) == (member_name, member_discriminator):
+            await ctx.guild.unban(user)
+            await ctx.send(f'Unbanned {user.mention}')
+
+
+@bot.command()
+@commands.has_permissions(ban_members=True)
+async def kick(ctx, member : discord.Member, reason=None):
+    """Kicks a user"""
+    if reason == None:
+        await ctx.send(f"Woah {ctx.author.mention}, Make sure you provide a reason!")
+    else:
+        messageok = f"You have been **kicked** from {ctx.guild.name} for {reason}"
+        to_send = '{0.mention} has been **kicked**!'.format(member)
+        await ctx.reply(to_send)
+        await member.send(messageok)
+        await member.kick(reason=reason)
+
 
 bot.run(DISCORD_TOKEN)
