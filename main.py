@@ -1,7 +1,7 @@
 # NOTE TO SELF: DO NOT UPLOAD THE DISCORD BOT TOKEN
 
 # TODO:
-# Moderation (mute) (kick + ban + unban done)
+# Moderation (mute + kick + ban)
 # Music bot
 # Reaction roles?
 # Air quality heh
@@ -57,10 +57,12 @@ async def on_message_delete(message):
 
 @bot.command()
 async def ping(ctx):
+    """Pong!"""
     await ctx.send('Hello {}'.format(ctx.author.mention))
 
 @bot.command()
 async def roll(ctx, dice: str):
+    """Roll NdN dice"""
     try:
         rolls, limit = map(int, dice.split('+'))
     except Exception:
@@ -73,15 +75,18 @@ async def roll(ctx, dice: str):
 
 @bot.command()
 async def joininfo(ctx, member: discord.Member):
+    """Get the join information of a user"""
     await ctx.send('{0.name}, `{0.id}` joined in {0.joined_at}'.format(member))
 
 @bot.command()
 async def getquote(ctx):
+    """Get an inspirational quote"""
     quote = get_quote()
     await ctx.reply(quote, mention_author=True)
 
 @bot.command()
 async def howlarge(ctx):
+    """how large is it?"""
     size = random.randint(1000, 99999)
     await ctx.reply('your mom is {} pounds large'.format(size), mention_author=True)
 
@@ -103,6 +108,7 @@ async def ban(ctx, member : discord.Member, reason=None):
 @bot.command()
 @commands.has_permissions(administrator = True)
 async def unban(ctx, *, member):
+    """Unbans a user"""
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split("#")
 
