@@ -8,7 +8,6 @@
 
 import random
 import discord
-import humanfriendly
 import os
 import re
 from dotenv import load_dotenv
@@ -19,9 +18,7 @@ import time
 from discord.ext import commands, tasks
 import functools
 import itertools
-import youtube_dl
 from discord.utils import get
-from keep_alive import keep_alive
 
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -29,7 +26,7 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 intents = discord.Intents().all()
 description="justanotherdscbot: MADE BY justanotherinternetguy#6982"
 client = discord.Client(intents=intents)
-bot = commands.Bot(command_prefix='~', intents=intents) 
+bot = commands.Bot(command_prefix='~', intents=intents)
 
 def get_quote():
     response = requests.get("https://zenquotes.io/api/random")
@@ -155,7 +152,7 @@ async def create_role(ctx, name, r, g, b, permissions):
 	Creates a custom roles with RGB colors and custom permissions
 
 	USE https://discordapi.com/permissions.html to calculate permission value
-	
+
 	"""
 	guild = ctx.guild
 	await guild.create_role(name=name, color=discord.Color.from_rgb(int(r), int(g), int(b)), permissions=discord.Permissions(permissions=int(permissions)))
@@ -195,6 +192,5 @@ async def purge(ctx, count):
 	"""Purge messages from chat"""
 	await ctx.channel.purge(limit = int(count))
 
-	
-keep_alive()
+
 bot.run(DISCORD_TOKEN)
