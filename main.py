@@ -30,6 +30,10 @@ def get_quote():
     quote = json_data[0]['q'] + " -" + json_data[0]['a']
     return quote
 
+def get_ym_joke():
+    resp = requests.get("https://api.yomomma.info/")
+    data = json.loads(resp.text)
+    return data
 
 @bot.event
 async def on_ready():
@@ -215,10 +219,10 @@ async def gtn(ctx, difficulty: int):
             tries += 1
             if int(msg.content) == ans:
                 await ctx.reply(f"You got it right: The answer was: `{ans}`.\n You did it in `{tries}` tries!")
-            
+
             if int(msg.content) > ans:
                 await ctx.reply(f"Too high! You have {20-tries} tries left.")
-            
+
             if int(msg.content) < ans:
                 await ctx.reply(f"Too low! You have {20-tries} tries left.")
 
@@ -231,10 +235,10 @@ async def gtn(ctx, difficulty: int):
             tries += 1
             if int(msg.content) == ans:
                 await ctx.reply(f"You got it right: The answer was: `{ans}`.\n You did it in `{tries}` tries!")
-            
+
             if int(msg.content) > ans:
                 await ctx.reply(f"Too high! You have {10-tries} tries left.")
-            
+
             if int(msg.content) < ans:
                 await ctx.reply(f"Too low! You have {10-tries} tries left.")
 
@@ -247,11 +251,19 @@ async def gtn(ctx, difficulty: int):
             tries += 1
             if int(msg.content) == ans:
                 await ctx.reply(f"You got it right: The answer was: `{ans}`.\n You did it in `{tries}` tries!")
-            
+
             if int(msg.content) > ans:
                 await ctx.reply(f"Too high! You have {5-tries} tries left.")
-            
+
             if int(msg.content) < ans:
                 await ctx.reply(f"Too low! You have {5-tries} tries left.")
-        
+
+
+@bot.command()
+async def yourmom(ctx):
+    """Your mom jokes"""
+    quote = get_ym_joke()
+    await ctx.reply(quote['joke'], mention_author=True)
+
+
 bot.run(DISCORD_TOKEN)
