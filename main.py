@@ -21,7 +21,7 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 intents = discord.Intents().all()
 description = "justanotherdscbot: MADE BY justanotherinternetguy#6982"
 client = discord.Client(intents=intents)
-bot = commands.Bot(command_prefix='~', intents=intents)
+bot = commands.Bot(command_prefix='=', intents=intents)
 
 
 def get_quote():
@@ -54,7 +54,7 @@ async def on_member_join(member):
 
 @bot.event
 async def on_message_edit(before, after):
-    fmt = '**{0.author}** got sniped:\n{0.content} -> {1.content}'
+    fmt = '**{0.author}** edited:\n{0.content} -> {1.content}'
     await before.channel.send(fmt.format(before, after))
 
 
@@ -71,9 +71,13 @@ async def ping(ctx):
 
 @bot.command()
 async def roll(ctx, dice: str):
-    """Roll NdN dice"""
+    """Roll NdN dice
+    Format must be in `<# of dice>+<# of faces per die>`
+    """
     try:
         rolls, limit = map(int, dice.split('+'))
+        if rolls <= 0 or limit <= 0:
+            await ctx.reply("Stop being dumb and try again")
     except Exception:
         await ctx.reply('{} - Format must be in `<# of dice>+<# of faces per die>`'.format(ctx.author.mention))
         return
@@ -107,10 +111,10 @@ async def howlarge(ctx):
 async def ban(ctx, member: discord.Member, reason=None):
     """Bans a user"""
     if member.id == ctx.author.id:
-        await ctx.reply("You can't ban yourself!")
+        await ctx.reply("You can't ban yourself.")
         return
     if reason is None:
-        await ctx.reply(f"Woah {ctx.author.mention}, Make sure you provide a reason!")
+        await ctx.reply(f"{ctx.author.mention}, Provide a reason please.")
     else:
         messageok = f"You have been **banned** from {ctx.guild.name} for {reason}"
         to_send = '{0.mention}, {1} has been **banned**!'.format(member, member.id)
@@ -210,6 +214,14 @@ async def gtn(ctx, difficulty: int):
     def scan(n):
         return n.content
 
+    try:
+        rolls, limit = map(int, dice.split('+'))
+        if rolls <= 0 or limit <= 0:
+            await ctx.reply("Stop being dumb and try again")
+    except Exception:
+        await ctx.reply('{} - Format must be in `<# of dice>+<# of faces per die>`'.format(ctx.author.mention))
+        return
+    """
     if difficulty == 1:
         tries = 0
         ans = random.randint(1, 50)
@@ -257,7 +269,7 @@ async def gtn(ctx, difficulty: int):
 
             if int(msg.content) < ans:
                 await ctx.reply(f"Too low! You have {5-tries} tries left.")
-
+"""
 
 @bot.command()
 async def yourmom(ctx):
